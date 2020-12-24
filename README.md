@@ -14,7 +14,9 @@ Many of the deep learning models designed to aid in drug discovery show improvem
 
 Efforts have been made to generalize the convolution operation for graphs, resulting in the development of graph convolutional neural networks (GCNs). As Kipf and Welling describe in their seminal paper [2], the idea behind graph convolutional neural networks (GCNs), as shown in Fig. 1, is to perform convolutions on a graph by aggregating (through sum, average, etc) each node’s neighborhood feature vectors. This new aggregated vector is then passed through a neural network layer, and the output is the new vector representation of the node. Additional neural network layers repeat this same process, except the input is the updated vectors from the first layer. 
 
-[Figure 1]
+<p align="center">
+  <img src="images/Figure 1.png"  alt="drawing" width="600"/>
+</p>
 
 ### b. Quantum mechanical property prediction
 
@@ -22,7 +24,9 @@ In 2017, Gilmer et al. [3] released a paper focusing on the specific use of neur
 
 Later on, Schutt et al. pointed out that enn-s2s was limited by the fact that atomic positions are discretized, and therefore the filter learned was also discrete which rendered it incapable of capturing the gradual positional changes of atoms [5]. In order to remedy this, Schutt et al. proposed a different method of graph convolution with continuous filters that mapped an atomic position to a corresponding filter value. This is advantageous in that it doesn't require atomic position data to lie on a grid, thereby resulting in smooth, rather than discrete energy predictions.
 
-[Figure 2]
+<p align="center">
+  <img src="images/Figure 2.png"  alt="drawing" width="500"/>
+</p>
 
 SchNet demonstrated superior performance over enn-s2s in predicting molecular energies and atomic forces on three different datasets. Fig. 3 provides an overview of the SchNet architecture. Molecules input into the model can be uniquely represented by a certain set of nuclear charges  and atomic positions  where  is the number of atoms. At each layer, the atoms in a given molecule are represented as a tuple of features:  with  where  and  are the number of layers, and feature maps, respectively. This representation is analogous to pixels in an image. In the embedding layer, the representation of each atom  is initialized at random using an embedding dependent on the atom type  which is optimized during training:  where  is the atom type embedding. 
 
@@ -30,7 +34,9 @@ Atom-wise layers, a recurring building block in this architecture, are dense lay
 
 Interactions between atoms are modeled by three interaction blocks: as shown above, the sequence of atom-wise, interatomic continuous-filter convolution (cfconv), and two more atom-wise layers separated by a softplus non-linearity produces . The cfconv layer uses a radial basis function that acts as a continuous filter generator. Additionally, the residual connection between  and  allows for the incorporation of interactions between atoms and previously computed feature maps. 
 
-[Figure 3]
+<p align="center">
+  <img src="images/Figure 3.png"  alt="drawing" width="600"/>
+</p>
 
 ## 3. Chainer Chemistry Implementation
 ### a. Dataset
@@ -48,7 +54,9 @@ I aimed to ultimately train a SchNet model that predicts the scalar coupling con
 
 structures.csv contains cartesian coordinates, so additional preprocessing was required in order to create graph representations of each molecule. In order to do so, I created a Graph class whose objects store the distances between each atom and an adjacency matrix. The fully processed train, validation, and test datasets for input into SchNet were dictionaries consisting of Graph objects for each molecule and associated scalar coupling contributions for each atom pair within that molecule. As an example of how each molecule is represented graphically, Fig. 4 displays the first molecule in the dataset, CH4 (methane).
 
-[Figure 4]
+<p align="center">
+  <img src="images/Figure 4.png"  alt="drawing" width="325"/>
+</p>
 
 ### c. SchNet Model
 
