@@ -70,20 +70,20 @@ Using these default cfconv hyperparameter values, I ran SchNet using Adam learni
 
  | **Learning Rate** | **Log MAE** |                 
  | :---: | :---: |  
- | <img src="https://render.githubusercontent.com/render/math?math=1\times 10^{-3}"> | <img src="https://render.githubusercontent.com/render/math?math=-1.22"> |
- | <img src="https://render.githubusercontent.com/render/math?math=5\times 10^{-3}"> | <img src="https://render.githubusercontent.com/render/math?math=-1.32"> |
- | <img src="https://render.githubusercontent.com/render/math?math=1\times 10^{-2}"> | <img src="https://render.githubusercontent.com/render/math?math=-1.17"> |            
+ | 1x10^-3 | -1.22 |
+ | 5x10^-3 | -1.32 |
+ | 1x10^-2 | -1.17 |            
 
 
 Using this optimal learning rate, I then ran the model using different values of radius resolution, and found that the lowest Log MAE was achieved with a radius resolution of 0.10:
 
  | **Radius Resolution** | **Log MAE** |                 
  | :---: | :---: |  
- | <img src="https://render.githubusercontent.com/render/math?math=0.05"> | <img src="https://render.githubusercontent.com/render/math?math=-1.21"> |
- | <img src="https://render.githubusercontent.com/render/math?math=0.075"> | <img src="https://render.githubusercontent.com/render/math?math=-1.25"> |
- | <img src="https://render.githubusercontent.com/render/math?math=0.10"> | <img src="https://render.githubusercontent.com/render/math?math=-1.32"> |   
- | <img src="https://render.githubusercontent.com/render/math?math=0.125"> | <img src="https://render.githubusercontent.com/render/math?math=-1.18"> |   
- | <img src="https://render.githubusercontent.com/render/math?math=0.15"> | <img src="https://render.githubusercontent.com/render/math?math=-1.27"> |   
+ | 0.05 | -1.21 |
+ | 0.075 | -1.25 |
+ | 0.10 | -1.32 |   
+ | 0.125 | -1.18 |   
+ | 0.15 | -1.27 |   
 
 Below is a sample of the 1,400,457 predicted scalar coupling constants predicted on the test dataset using these optimal learning rate and radius resolution values:
 
