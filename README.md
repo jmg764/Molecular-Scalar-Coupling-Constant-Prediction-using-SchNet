@@ -64,7 +64,7 @@ I constructed, trained, evaluated, and optimized the SchNet model using the Chai
 
 The loss function used is log mean absolute error (Log MAE): <img src="https://render.githubusercontent.com/render/math?math={\rm loss} = \frac{1}{T} \sum_{t=1}^{T} {\rm log} \Big (\frac{1}{n_t} \sum_{i=1}^{n_t} |y_i - \hat y_i| \Big )"> where <img src="https://render.githubusercontent.com/render/math?math=T"> is the number of scalar coupling types, <img src="https://render.githubusercontent.com/render/math?math=n_t"> is the number of observations of type <img src="https://render.githubusercontent.com/render/math?math=t">, <img src="https://render.githubusercontent.com/render/math?math=y_i"> is the actual scalar coupling constant for the observation, and <img src="https://render.githubusercontent.com/render/math?math=\hat y_i"> is the predicted scalar coupling constant for the observation. It is calculated for each scalar coupling type, and then averaged across tips, so that a 1% decrease in error for one type provides the same improvement in score as a decrease for another type.
 
-I tested out a variety of hyperparameter configurations in order to optimize the model; each of them used Adam optimization with a batch size of 4 over the course of 25 epochs. I was particularly focused on discovering the optimal radial basis function hyperparameters within the cfconv layer. The radial basis function is expressed as <img src="https://render.githubusercontent.com/render/math?math=e_k({\bf r}_i - {\bf r}_j) = {\rm exp}(-\gamma \|d_{ij} - \mu_k \|^2)"> located at centers 0Å ≤ <img src="https://render.githubusercontent.com/render/math?math= \mu_k "> ≤ 30Å every 0.1Å with <img src="https://render.githubusercontent.com/render/math?math=\gamma = ">10Å, and 300 is the interatomic distance used as input for the filter network. This translates to hyperparameter values num_rbf=300, radius_resolution=0.1, and gamma=10.0 in Chainer Chemistry implementation of cfconv. In general, these values are chosen such that all distances occurring in the datasets are covered by the cfconv filters. Choosing fewer centers corresponds to reducing the resolution of the filter, while restricting the range of the centers corresponds to the filter size in a usual convolutional layer.
+I tested out a variety of hyperparameter configurations in order to optimize the model; each of them used Adam optimization with a batch size of 4 over the course of 25 epochs. I was particularly focused on discovering the optimal radial basis function hyperparameters within the cfconv layer. The radial basis function is expressed as <img src="https://render.githubusercontent.com/render/math?math=e_k({\bf r}_i - {\bf r}_j) = {\rm exp}(-\gamma \|d_{ij} - \mu_k \|^2)"> located at centers 0Å ≤ µ_k ≤ 30Å every 0.1Å with <img src="https://render.githubusercontent.com/render/math?math=\gamma = ">10Å, and 300 is the interatomic distance used as input for the filter network. This translates to hyperparameter values num_rbf=300, radius_resolution=0.1, and gamma=10.0 in Chainer Chemistry implementation of cfconv. In general, these values are chosen such that all distances occurring in the datasets are covered by the cfconv filters. Choosing fewer centers corresponds to reducing the resolution of the filter, while restricting the range of the centers corresponds to the filter size in a usual convolutional layer.
 
 Using these default cfconv hyperparameter values, I ran SchNet using Adam learning rates of <img src="https://render.githubusercontent.com/render/math?math=1\times 10^{-3}">, <img src="https://render.githubusercontent.com/render/math?math=5\times 10^{-3}">, and <img src="https://render.githubusercontent.com/render/math?math=1\times 10^{-2}">. Each 25-epoch training took approximately 4.5-5 hours. As shown in the table below, the model performed best (achieved lowest Log MAE) with a learning rate of <img src="https://render.githubusercontent.com/render/math?math=5\times 10^{-3}">.
 
@@ -77,11 +77,28 @@ Using these default cfconv hyperparameter values, I ran SchNet using Adam learni
 
 Using this optimal learning rate, I then ran the model using different values of radius resolution, and found that the lowest Log MAE was achieved with a radius resolution of 0.10:
 
-[Table 2]
+ | **Radius Resolution** | **Log MAE** |                 
+ | :---: | :---: |  
+ | <img src="https://render.githubusercontent.com/render/math?math=0.05"> | <img src="https://render.githubusercontent.com/render/math?math=-1.21"> |
+ | <img src="https://render.githubusercontent.com/render/math?math=0.075"> | <img src="https://render.githubusercontent.com/render/math?math=-1.25"> |
+ | <img src="https://render.githubusercontent.com/render/math?math=0.10"> | <img src="https://render.githubusercontent.com/render/math?math=-1.32"> |   
+ | <img src="https://render.githubusercontent.com/render/math?math=0.125"> | <img src="https://render.githubusercontent.com/render/math?math=-1.18"> |   
+ | <img src="https://render.githubusercontent.com/render/math?math=0.15"> | <img src="https://render.githubusercontent.com/render/math?math=-1.27"> |   
 
 Below is a sample of the 1,400,457 predicted scalar coupling constants predicted on the test dataset using these optimal learning rate and radius resolution values:
 
-[Table 3]
+ | **Atom ID** | **Predicted Scalar Coupling Constant** |  **Actual Scalar Coupling Constant** |                
+ | :---: | :---: | :---: | 
+ | 236 | 79.78 | 79.09 |
+ | 237 | 1.89 | 1.45 |
+ | 238 | 0.94 | 0.93 |
+ | 239 | -12.34 | -12.09 |
+ | 240 | -11.36 | -11.28 |
+ | 241 | 1.69 | 1.43 |
+ | 242 | 79.86 | 79.64 |
+ | 243 | -2.80 | -3.07 |
+ | 243 | 8.45 | 8.26 |
+
 
 ## 4. Conclusion
 
